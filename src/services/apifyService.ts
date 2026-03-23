@@ -38,20 +38,43 @@ export async function scrapeWebsiteContacts(urls: string[]) {
   return runApifyActor('jakubbalada~contact-email-scraper', input);
 }
 
-// Act 4: State License Databases (Generic or Specific)
+// Act 4: Yelp Scraper (apify/yelp-scraper)
+export async function scrapeYelp(query: string, location: string, maxResults: number) {
+  validateToken();
+  const input = {
+    searchTerms: [query],
+    location,
+    maxResultsPerTerm: maxResults,
+  };
+  return runApifyActor('apify~yelp-scraper', input);
+}
+
+// Act 5: Facebook Pages Scraper (apify/facebook-pages-scraper)
+export async function scrapeFacebook(queries: string[], maxResults: number) {
+  validateToken();
+  const input = {
+    searchQueries: queries,
+    maxResults,
+    scrapeAbout: true,
+    scrapePosts: false,
+  };
+  return runApifyActor('apify~facebook-pages-scraper', input);
+}
+
+// Act 6: State License Databases (Generic placeholder)
 export async function scrapeStateLicenses(state: string, trade: string) {
   validateToken();
   const input = {
     state,
     trade,
-    // Note: State Board scrapers are specialized. 
-    // Example: CSLB (California) scraper actor ID: 'apify/cslb-scraper' (if available)
   };
-  return runApifyActor('apify~state-license-scraper', input); // Generic placeholder
+  return runApifyActor('apify~state-license-scraper', input);
 }
 
+
 // Helper: Generic Apify Actor Runner
-async function runApifyActor(actorId: string, input: any) {
+async function runApifyActor(actorId: string, input: Record<string, unknown>) {
+
   try {
     const response = await fetch(
       `https://api.apify.com/v2/acts/${actorId}/runs?token=${APIFY_TOKEN}`,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Search, MapPin, Database, Briefcase, FileText, Loader2, Zap } from 'lucide-react';
-import { scrapeGoogleMaps, scrapeLinkedInProfiles, scrapeWebsiteContacts } from '../services/apifyService';
+import { Search, MapPin, Database, Briefcase, FileText, Loader2, Zap, Facebook } from 'lucide-react';
+import { scrapeGoogleMaps, scrapeLinkedInProfiles, scrapeWebsiteContacts, scrapeYelp, scrapeFacebook } from '../services/apifyService';
 
 interface SearchCommandCenterProps {
   onResultsFetched: (results: any[]) => void;
@@ -17,6 +17,7 @@ export function SearchCommandCenter({ onResultsFetched }: SearchCommandCenterPro
     { id: 'linkedin', label: 'LinkedIn', icon: Briefcase },
     { id: 'website', label: 'Website', icon: FileText },
     { id: 'yelp', label: 'Yelp', icon: Database },
+    { id: 'facebook', label: 'Facebook', icon: Facebook },
     { id: 'licenses', label: 'State Licenses', icon: FileText },
   ];
 
@@ -36,8 +37,15 @@ export function SearchCommandCenter({ onResultsFetched }: SearchCommandCenterPro
         const urls = query.includes('http') ? query.split(',').map(u => u.trim()) : [];
         if (urls.length === 0) throw new Error('Please enter website URLs separated by commas.');
         results = await scrapeWebsiteContacts(urls);
+      } else if (activeSource === 'yelp') {
+        // Extract location from query if possible, or use a default
+        const [searchTerm, location] = query.includes(' in ') ? query.split(' in ') : [query, 'USA'];
+        results = await scrapeYelp(searchTerm.trim(), location.trim(), resultsCount);
+      } else if (activeSource === 'facebook') {
+        const queries = query.split(',').map(q => q.trim());
+        results = await scrapeFacebook(queries, resultsCount);
       } else {
-        // Yelp or other sources placeholder
+        // Other sources placeholder
         console.log(`Scraping from ${activeSource}...`);
         await new Promise(resolve => setTimeout(resolve, 2000));
         results = [];

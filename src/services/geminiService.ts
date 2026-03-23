@@ -42,9 +42,10 @@ export async function enrichLeadWithGemini(companyName: string, websiteUrl: stri
     
     let text = response.text || "{}";
     
-    if (text.startsWith('\`\`\`json')) {
-      text = text.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
+    if (text.startsWith('```json')) {
+      text = text.replace(/```json/g, '').replace(/```/g, '').trim();
     }
+
     
     return JSON.parse(text);
   } catch (error) {

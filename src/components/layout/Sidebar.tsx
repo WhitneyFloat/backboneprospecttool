@@ -1,10 +1,12 @@
-import { LayoutDashboard, Users, Zap, Settings, Database, FileText } from 'lucide-react';
+import { LayoutDashboard, Users, Zap, Settings, Database, FileText, Inbox } from 'lucide-react';
 
 interface SidebarProps {
   onShowLeads?: () => void;
+  activeView: 'DASHBOARD' | 'INBOX';
+  onViewChange: (view: 'DASHBOARD' | 'INBOX') => void;
 }
 
-export function Sidebar({ onShowLeads }: SidebarProps) {
+export function Sidebar({ onShowLeads, activeView, onViewChange }: SidebarProps) {
   return (
     <aside className="glass-card" style={{ width: '280px', margin: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '32px', height: 'calc(100vh - 32px)', position: 'sticky', top: '16px', borderRadius: '16px' }}>
       <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -27,8 +29,19 @@ export function Sidebar({ onShowLeads }: SidebarProps) {
         </div>
       </div>
 
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <NavItem icon={<LayoutDashboard size={18} />} label="Overview" active />
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <NavItem 
+          icon={<LayoutDashboard size={18} />} 
+          label="Overview" 
+          active={activeView === 'DASHBOARD'} 
+          onClick={() => onViewChange('DASHBOARD')}
+        />
+        <NavItem 
+          icon={<Inbox size={18} />} 
+          label="Replies" 
+          active={activeView === 'INBOX'} 
+          onClick={() => onViewChange('INBOX')}
+        />
         <NavItem 
           icon={<Users size={18} />} 
           label="Leads" 
@@ -42,6 +55,7 @@ export function Sidebar({ onShowLeads }: SidebarProps) {
         <NavItem icon={<FileText size={18} />} label="Archives" />
         <NavItem icon={<Settings size={18} />} label="Settings" />
       </nav>
+
       
       <div style={{ marginTop: 'auto' }}>
         <div className="glass-card" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(158, 202, 255, 0.05)', border: '1px solid rgba(158, 202, 255, 0.1)' }}>
