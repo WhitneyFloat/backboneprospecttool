@@ -1,5 +1,10 @@
 const APIFY_TOKEN = import.meta.env.VITE_APIFY_API_TOKEN;
 
+// Diagnostic: Verify token is loaded (obfuscated)
+if (import.meta.env.DEV) {
+  console.log('[Apify Service] Token check:', APIFY_TOKEN ? `Loaded (${APIFY_TOKEN.slice(0, 8)}...)` : 'MISSING');
+}
+
 // Act 1: Google Maps Scraper (nwua/google-maps-scraper)
 export async function scrapeGoogleMaps(query: string, maxResults: number) {
   validateToken();
@@ -109,6 +114,6 @@ async function runApifyActor(actorId: string, input: Record<string, unknown>) {
 
 function validateToken() {
   if (!APIFY_TOKEN || APIFY_TOKEN === 'your_apify_token_here') {
-    throw new Error('Apify token not configured. Please add it to your .env file.');
+    throw new Error('Apify token not configured. Please add it to your .env file and RESTART your dev server (npm run dev).');
   }
 }

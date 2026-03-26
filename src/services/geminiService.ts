@@ -9,7 +9,7 @@ if (GEMINI_API_KEY && GEMINI_API_KEY !== 'your_gemini_api_key_here') {
 
 export async function enrichLeadWithGemini(companyName: string, websiteUrl: string = '', companyDescription: string = '', ownerName: string = '') {
   if (!ai) {
-    throw new Error('Gemini API key not configured. Please add to your .env file.');
+    throw new Error('Gemini API key not configured. Please add it to your .env file and RESTART your dev server.');
   }
 
   const prompt = `
