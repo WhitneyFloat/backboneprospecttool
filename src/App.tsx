@@ -214,7 +214,7 @@ function App() {
             <div>
               <h1 className="hero-display" style={{ marginBottom: '4px' }}>PROSPECT INTELLIGENCE</h1>
               <p className="font-headline" style={{ fontSize: '12px', color: 'var(--primary)', letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.8 }}>
-                AI-powered lead generation // SYSTEM_UPLINK_READY
+                AI-powered lead generation // SYSTEM_V2_UPLINK_LIVE[FIXED]
               </p>
             </div>
             
